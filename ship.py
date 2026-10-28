@@ -5,6 +5,9 @@ import pygame
 from paths import IMAGES_DIR
 
 
+SKIN_FILES = ('ship2(no bg).png', 'ship.png')
+
+
 class Ship:
     """Manages the ship's image, position, and vertical movement."""
 
@@ -18,7 +21,11 @@ class Ship:
         self.settings = game.settings
         self.screen_rect = self.screen.get_rect()
 
-        self.image = self._load_image(IMAGES_DIR / 'ship2(no bg).png')
+        # Appearances the player can cycle through with Tab.
+        self.skins = [self._load_image(IMAGES_DIR / name)
+                      for name in SKIN_FILES]
+        self.skin_index = 0
+        self.image = self.skins[self.skin_index]
         self.rect = self.image.get_rect()
         self.rect.midleft = (self.settings.ship_margin,
                              self.screen_rect.centery)
@@ -37,6 +44,14 @@ class Ship:
         size = (self.settings.ship_width, round(image.get_height() * scale))
         image = pygame.transform.smoothscale(image, size)
         return pygame.transform.rotate(image, -90)
+
+    def switch_skin(self):
+        """Switch to the next appearance, keeping the ship's center
+        position; movement flags are untouched."""
+        self.skin_index = (self.skin_index + 1) % len(self.skins)
+        self.image = self.skins[self.skin_index]
+        self.rect = self.image.get_rect(center=self.rect.center)
+        self.y = float(self.rect.y)
 
     def update(self):
         """Move the ship while a key is held, staying on screen."""

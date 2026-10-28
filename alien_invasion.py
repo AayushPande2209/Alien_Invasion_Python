@@ -60,6 +60,8 @@ class AlienInvasion:
         """Respond to a key being pressed."""
         if event.key == pygame.K_q:
             self.quit_game()
+        elif event.key == pygame.K_TAB:
+            self.ship.switch_skin()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
         elif event.key == pygame.K_UP:
