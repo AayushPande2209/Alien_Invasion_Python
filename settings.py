@@ -14,3 +14,8 @@ class Settings:
 
         # Frame rate
         self.FPS = 60
+
+        # Ship
+        self.ship_speed = 6
+        self.ship_width = 70  # width of the unrotated image, in pixels
+        self.ship_margin = 20  # gap between the left edge and the ship

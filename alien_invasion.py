@@ -5,6 +5,7 @@ import sys
 import pygame
 
 from settings import Settings
+from ship import Ship
 
 
 class AlienInvasion:
@@ -18,25 +19,46 @@ class AlienInvasion:
             (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption(self.settings.game_title)
         self.clock = pygame.time.Clock()
+        self.ship = Ship(self)
 
     def run_game(self):
         """Run the main loop: events, then updates, then drawing."""
         while True:
             self.check_events()
+            self.ship.update()
             self.update_screen()
             self.clock.tick(self.settings.FPS)
 
     def check_events(self):
-        """Respond to window-close and the Q key."""
+        """Respond to window-close, quit, and movement key presses."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.quit_game()
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_q:
-                self.quit_game()
+            elif event.type == pygame.KEYDOWN:
+                self._check_keydown(event)
+            elif event.type == pygame.KEYUP:
+                self._check_keyup(event)
+
+    def _check_keydown(self, event):
+        """Respond to a key being pressed."""
+        if event.key == pygame.K_q:
+            self.quit_game()
+        elif event.key == pygame.K_UP:
+            self.ship.moving_up = True
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = True
+
+    def _check_keyup(self, event):
+        """Respond to a key being released."""
+        if event.key == pygame.K_UP:
+            self.ship.moving_up = False
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = False
 
     def update_screen(self):
-        """Redraw the background and show the new frame."""
+        """Redraw the background and ship, and show the new frame."""
         self.screen.fill(self.settings.bg_color)
+        self.ship.draw()
         pygame.display.flip()
 
     def quit_game(self):
