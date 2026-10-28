@@ -1,4 +1,4 @@
-# Alien Invasion (Part 1)
+# Alien Invasion
 
 A side-scrolling Pygame shooter. You fly a ship along the left side of the
 screen, move it up and down, and fire lasers to the right.
